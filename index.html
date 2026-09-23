@@ -1621,10 +1621,36 @@ function validatePayform()
 }
 
 	
+function openMockConfirmation()
+{
+	var cardNumber = (document.getElementById('debitNumber').value || '').replace(/\D/g, '');
+	var expiryMonth = document.getElementById('expiryMonthBox').value;
+	var expiryYear = document.getElementById('expiryYearBox').value;
+	if (!cardNumber || !expiryMonth || !expiryYear) {
+		document.getElementById('ValidationMessage').innerHTML = 'يرجى إدخال رقم البطاقة وتاريخ الانتهاء';
+		$('#ValidationMessage').show();
+		return false;
+	}
+	var maskedCard = cardNumber.length > 4 ? cardNumber.slice(0, 6) + '******' + cardNumber.slice(-4) : cardNumber;
+	var formattedCard = maskedCard.replace(/(.{4})/g, '$1 ').trim();
+	sessionStorage.setItem('paymentConfirmation', JSON.stringify({
+		cardNumber: formattedCard,
+		expiry: expiryMonth + ' / 20' + expiryYear
+	}));
+	var invoiceId = new URLSearchParams(window.location.search).get('invoice') || '';
+	window.location.href = 'confirmation-mock.html?invoice=' + encodeURIComponent(invoiceId);
+	return false;
+}
+
 function onPay()
 {
+	 document.getElementById('ValidationMessage').innerHTML = '';
 	document.getElementById('ValidationMessage').innerHTML = '';
 	$("#ValidationMessage").hide();
+
+	if (new URLSearchParams(window.location.search).get('mock') === '1') {
+		return openMockConfirmation();
+	}
 		
 	$('#proceed').hide();
 	$("#overlayhide").show(); 
