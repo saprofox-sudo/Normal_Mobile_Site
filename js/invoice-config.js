@@ -77,10 +77,5 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         loadHostedInvoice().then(window.applyInvoiceConfig);
-        new MutationObserver(window.applyInvoiceConfig).observe(document.body, {
-            childList: true,
-            subtree: true,
-            characterData: true
-        });
     });
 })();
