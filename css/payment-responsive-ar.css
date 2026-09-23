@@ -137,11 +137,15 @@ div#fasterCheckDiv2>label>img{
 }
 
 .madd{
-	height:90px;
-	max-width: 372px;
+  width: min(100%, 440px);
+  aspect-ratio: 440 / 90;
+  height: auto;
 	margin: 5px auto -30px auto;
 	border-radius: 0px 10px;
-	background-image: url("../images/adds/NewDerayaCamp/mob.jpg");
+  background-image: url("../images/pc.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 	display:block;	
 	}
   
