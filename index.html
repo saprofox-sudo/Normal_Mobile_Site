@@ -1726,7 +1726,7 @@ function onPay()
 			 $('#proceed').show();
 			   return false;
     	}
-		if(debitCardNo.length != cardBrandLength){
+		if(Number.isFinite(cardBrandLength) && debitCardNo.length != cardBrandLength){
 	    	 //$("#debitNumber").focus();
 			 document.getElementById('ValidationMessage').innerHTML = '&#1575;&#1604;&#1585;&#1580;&#1575;&#1569; &#1573;&#1583;&#1582;&#1575;&#1604; &#1585;&#1602;&#1605; &#1576;&#1591;&#1575;&#1602;&#1577; &#1589;&#1575;&#1604;&#1581;';
 			 $("#ValidationMessage").show(); 
