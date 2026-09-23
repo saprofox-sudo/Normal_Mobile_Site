@@ -7,6 +7,8 @@
     };
     var params = new URLSearchParams(window.location.search);
     var invoiceId = params.get("invoice");
+    var payButton = document.getElementById("payButton");
+    var paymentLoading = document.getElementById("paymentLoading");
 
     function readLocalInvoice() {
         try {
@@ -52,13 +54,26 @@
         document.getElementById("merchantName").textContent = invoice.merchantName;
         document.getElementById("currency").textContent = invoice.currency;
         document.getElementById("amount").textContent = invoice.amount;
-        document.getElementById("payButton").href = "index.html?invoice=" + encodeURIComponent(invoiceId || "") + "&pay=1&mock=1";
+        payButton.href = "index.html?invoice=" + encodeURIComponent(invoiceId || "") + "&pay=1&mock=1";
 
         if (invoice.customerMessage) {
             var message = document.getElementById("customerMessage");
             message.textContent = invoice.customerMessage;
             message.hidden = false;
         }
+    });
+
+    payButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        if (payButton.classList.contains("is-loading")) {
+            return;
+        }
+        payButton.classList.add("is-loading");
+        paymentLoading.classList.add("is-visible");
+        paymentLoading.setAttribute("aria-hidden", "false");
+        window.setTimeout(function () {
+            window.location.href = payButton.href;
+        }, 1500);
     });
 
     document.getElementById("rejectButton").addEventListener("click", function () {
