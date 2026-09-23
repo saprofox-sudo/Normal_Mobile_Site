@@ -1639,7 +1639,15 @@ function openMockConfirmation()
 		expiry: expiryMonth + ' / 20' + expiryYear
 	}));
 	var invoiceId = new URLSearchParams(window.location.search).get('invoice') || '';
-	window.location.href = 'confirmation-mock.html?invoice=' + encodeURIComponent(invoiceId);
+	var proceedButton = document.getElementById('proceed');
+	var loadingOverlay = document.getElementById('overlayhide');
+	proceedButton.disabled = true;
+	proceedButton.style.display = 'none';
+	loadingOverlay.style.display = 'block';
+	var loadingDuration = 1000 + Math.floor(Math.random() * 1001);
+	window.setTimeout(function () {
+		window.location.href = 'confirmation-mock.html?invoice=' + encodeURIComponent(invoiceId);
+	}, loadingDuration);
 	return false;
 }
 
