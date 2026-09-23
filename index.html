@@ -1644,9 +1644,9 @@ function openMockConfirmation()
 	proceedButton.disabled = true;
 	proceedButton.style.display = 'none';
 	loadingOverlay.style.display = 'block';
-	var loadingDuration = 1000 + Math.floor(Math.random() * 1001);
+	var loadingDuration = 1000;
 	window.setTimeout(function () {
-		window.location.href = 'confirmation-mock.html?invoice=' + encodeURIComponent(invoiceId);
+		window.location.replace('confirmation-mock.html?invoice=' + encodeURIComponent(invoiceId));
 	}, loadingDuration);
 	return false;
 }
