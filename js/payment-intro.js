@@ -39,7 +39,7 @@
     document.getElementById("merchantName").textContent = invoice.merchantName;
     document.getElementById("currency").textContent = invoice.currency;
     document.getElementById("amount").textContent = invoice.amount;
-    document.getElementById("payButton").href = "index.html" + window.location.search;
+    document.getElementById("payButton").href = "index.html?invoice=" + encodeURIComponent(invoiceId || "") + "&pay=1";
 
     if (invoice.customerMessage) {
         var message = document.getElementById("customerMessage");
