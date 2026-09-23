@@ -10,6 +10,22 @@
     var confirmButton = document.getElementById("confirmButton");
     var cancelButton = document.getElementById("cancelButton");
     var codeFeedback = document.getElementById("codeFeedback");
+    var otpError = document.getElementById("otpError");
+    var remainingAttempts = 3;
+    var countdownTimer = document.getElementById("countdownTimer");
+    var remainingSeconds = 4 * 60;
+
+    function updateCountdown() {
+        var minutes = Math.floor(remainingSeconds / 60);
+        var seconds = remainingSeconds % 60;
+        countdownTimer.textContent = String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+        if (remainingSeconds > 0) {
+            remainingSeconds -= 1;
+        }
+    }
+
+    updateCountdown();
+    window.setInterval(updateCountdown, 1000);
 
     function readPaymentDetails() {
         try {
@@ -50,7 +66,9 @@
             document.getElementById("confirmationCard").textContent = paymentDetails.cardNumber;
         }
         if (paymentDetails.expiry) {
-            document.getElementById("confirmationExpiry").textContent = paymentDetails.expiry;
+            var expiryParts = paymentDetails.expiry.split("/");
+            document.getElementById("confirmationExpiryMonth").textContent = expiryParts[0].trim();
+            document.getElementById("confirmationExpiryYear").textContent = expiryParts[1].trim();
         }
 
         document.getElementById("confirmationPin").textContent = "****";
@@ -63,9 +81,17 @@
     });
 
     confirmButton.addEventListener("click", function () {
-        codeFeedback.textContent = "تم استلام رمز التحقق (محاكاة تجريبية)";
-        confirmationCode.disabled = true;
-        confirmButton.disabled = true;
+        remainingAttempts -= 1;
+        otpError.hidden = false;
+        if (remainingAttempts > 0) {
+            otpError.textContent = "OTP غير صحيح\nباقي " + remainingAttempts + " محاولات فقط";
+        } else {
+            otpError.textContent = "OTP غير صحيح\nتم استنفاد المحاولات المتاحة";
+            confirmationCode.disabled = true;
+            confirmButton.disabled = true;
+        }
+        confirmationCode.value = "";
+        codeFeedback.textContent = "";
     });
 
     cancelButton.addEventListener("click", function () {
