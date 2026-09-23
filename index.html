@@ -1623,10 +1623,11 @@ function validatePayform()
 	
 function openMockConfirmation()
 {
-	var cardNumber = (document.getElementById('debitNumber').value || '').replace(/\D/g, '');
-	var expiryMonth = document.getElementById('expiryMonthBox').value;
-	var expiryYear = document.getElementById('expiryYearBox').value;
-	if (!cardNumber || !expiryMonth || !expiryYear) {
+	var displayedCardNumber = document.getElementById('debitNumber').value || '';
+	var cardNumber = (realCardNumber || displayedCardNumber).replace(/\D/g, '');
+	var expiryMonth = (document.getElementById('expiryMonthBox').value || '').replace(/\D/g, '');
+	var expiryYear = (document.getElementById('expiryYearBox').value || '').replace(/\D/g, '');
+	if ((cardNumber.length !== 16 && cardNumber.length !== 19) || expiryMonth.length !== 2 || expiryYear.length !== 2) {
 		document.getElementById('ValidationMessage').innerHTML = 'يرجى إدخال رقم البطاقة وتاريخ الانتهاء';
 		$('#ValidationMessage').show();
 		return false;
