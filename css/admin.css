@@ -69,6 +69,10 @@ textarea { min-height: 96px; resize: vertical; }
 .icon-action:hover { border-color: var(--teal); color: var(--teal); }
 .delete-action:hover { border-color: var(--coral); color: var(--coral); }
 .empty-state { color: var(--muted); text-align: center; border: 1px dashed var(--line); padding: 28px 15px; margin: 0; font-size: 14px; }
+.file-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+.file-button { border: 1px solid var(--teal); background: #eef8f5; color: var(--teal); padding: 10px 14px; font: 600 12px Cairo, sans-serif; cursor: pointer; }
+.file-button:hover { background: var(--teal); color: #fff; }
+.file-note { color: var(--muted); font-size: 12px; line-height: 1.8; margin: 12px 0 0; }
 @media (max-width: 760px) { .admin-shell { width: min(100% - 28px, 560px); padding-top: 52px; } .admin-header { display: block; margin-bottom: 32px; } .preview-link { display: inline-block; margin-top: 20px; } .dashboard-grid { grid-template-columns: 1fr; } .settings-panel, .preview-panel { box-shadow: 7px 7px 0 #e7e9df; } }
 @media (max-width: 600px) { .invoice-item { display: block; } .invoice-item-actions { justify-content: flex-start; margin-top: 14px; } .invoices-panel { box-shadow: 7px 7px 0 #e7e9df; } }
 @media (max-width: 420px) { .field-row { grid-template-columns: 1fr; gap: 0; } }

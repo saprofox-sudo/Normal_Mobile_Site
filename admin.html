@@ -75,7 +75,7 @@
                     </div>
                     <p class="preview-message" id="previewMessage"></p>
                 </div>
-                <p class="local-note">الإعدادات محفوظة على هذا المتصفح فقط. في بيئة الإنتاج يجب ربطها بواجهة خلفية وصلاحيات دخول.</p>
+                <p class="local-note">الإعدادات الحالية محلية. استخدم تصدير JSON لحفظها في ملف ورفعه إلى GitHub Pages.</p>
             </aside>
         </section>
 
@@ -89,6 +89,12 @@
             </div>
             <div class="invoice-list" id="invoiceList"></div>
             <p class="empty-state" id="emptyState">لا توجد فواتير بعد. أضف أول فاتورة من النموذج أعلاه.</p>
+            <div class="file-actions">
+                <button class="file-button" id="exportInvoices" type="button">تصدير invoices.json</button>
+                <label class="file-button" for="importInvoices">استيراد invoices.json</label>
+                <input id="importInvoices" type="file" accept="application/json,.json" hidden>
+            </div>
+            <p class="file-note">بعد التصدير ارفع الملف إلى مجلد <strong>data</strong> في GitHub Pages لتظهر الفواتير للمستخدمين.</p>
         </section>
     </main>
     <script src="js/admin.js"></script>

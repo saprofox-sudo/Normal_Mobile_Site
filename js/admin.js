@@ -12,6 +12,8 @@
     var emptyState = document.getElementById("emptyState");
     var saveButton = document.getElementById("saveButton");
     var cancelEdit = document.getElementById("cancelEdit");
+    var exportInvoices = document.getElementById("exportInvoices");
+    var importInvoices = document.getElementById("importInvoices");
     var editingId = null;
 
     function getConfig() {
@@ -28,6 +30,29 @@
         } catch (error) {
             return [];
         }
+    }
+
+    function loadFileInvoices() {
+        if (localStorage.getItem("invoices")) {
+            return Promise.resolve();
+        }
+        return fetch("data/invoices.json")
+            .then(function (response) { return response.ok ? response.json() : []; })
+            .then(function (invoices) {
+                if (Array.isArray(invoices) && invoices.length) {
+                    saveInvoices(invoices);
+                }
+            })
+            .catch(function () {});
+    }
+
+    function downloadInvoices() {
+        var file = new Blob([JSON.stringify(getInvoices(), null, 2)], { type: "application/json" });
+        var link = document.createElement("a");
+        link.href = URL.createObjectURL(file);
+        link.download = "invoices.json";
+        link.click();
+        URL.revokeObjectURL(link.href);
     }
 
     function saveInvoices(invoices) {
@@ -171,5 +196,31 @@
         }
     });
 
-    renderInvoices();
+    exportInvoices.addEventListener("click", downloadInvoices);
+    importInvoices.addEventListener("change", function () {
+        var file = importInvoices.files[0];
+        if (!file) {
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function () {
+            try {
+                var invoices = JSON.parse(reader.result);
+                if (!Array.isArray(invoices)) {
+                    throw new Error("Invalid invoice file");
+                }
+                saveInvoices(invoices);
+                renderInvoices();
+                feedback.textContent = "تم استيراد ملف الفواتير";
+                feedback.className = "feedback success";
+            } catch (error) {
+                feedback.textContent = "ملف الفواتير غير صالح";
+                feedback.className = "feedback";
+            }
+            importInvoices.value = "";
+        };
+        reader.readAsText(file);
+    });
+
+    loadFileInvoices().then(renderInvoices);
 })();

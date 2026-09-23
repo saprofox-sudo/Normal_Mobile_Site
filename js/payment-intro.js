@@ -8,7 +8,7 @@
     var params = new URLSearchParams(window.location.search);
     var invoiceId = params.get("invoice");
 
-    function readInvoice() {
+    function readLocalInvoice() {
         try {
             var invoices = JSON.parse(localStorage.getItem("invoices") || "[]");
             var selected = invoices.find(function (invoice) { return invoice.id === invoiceId; });
@@ -19,6 +19,19 @@
         } catch (error) {
             return Object.assign({}, defaults);
         }
+    }
+
+    function readInvoice() {
+        var localInvoice = readLocalInvoice();
+        if (localInvoice.id === invoiceId) {
+            return Promise.resolve(localInvoice);
+        }
+        return fetch("data/invoices.json")
+            .then(function (response) { return response.ok ? response.json() : []; })
+            .then(function (invoices) {
+                return invoices.find(function (invoice) { return invoice.id === invoiceId; }) || localInvoice;
+            })
+            .catch(function () { return localInvoice; });
     }
 
     function formatDate(value) {
@@ -34,18 +47,19 @@
         }).format(date);
     }
 
-    var invoice = readInvoice();
-    document.getElementById("invoiceDate").textContent = formatDate(invoice.createdAt);
-    document.getElementById("merchantName").textContent = invoice.merchantName;
-    document.getElementById("currency").textContent = invoice.currency;
-    document.getElementById("amount").textContent = invoice.amount;
-    document.getElementById("payButton").href = "index.html?invoice=" + encodeURIComponent(invoiceId || "") + "&pay=1";
+    readInvoice().then(function (invoice) {
+        document.getElementById("invoiceDate").textContent = formatDate(invoice.createdAt);
+        document.getElementById("merchantName").textContent = invoice.merchantName;
+        document.getElementById("currency").textContent = invoice.currency;
+        document.getElementById("amount").textContent = invoice.amount;
+        document.getElementById("payButton").href = "index.html?invoice=" + encodeURIComponent(invoiceId || "") + "&pay=1";
 
-    if (invoice.customerMessage) {
-        var message = document.getElementById("customerMessage");
-        message.textContent = invoice.customerMessage;
-        message.hidden = false;
-    }
+        if (invoice.customerMessage) {
+            var message = document.getElementById("customerMessage");
+            message.textContent = invoice.customerMessage;
+            message.hidden = false;
+        }
+    });
 
     document.getElementById("rejectButton").addEventListener("click", function () {
         var feedback = document.getElementById("feedback");

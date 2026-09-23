@@ -23,6 +23,26 @@
 
     window.invoiceConfig = readConfig();
 
+    function loadHostedInvoice() {
+        var invoiceId = new URLSearchParams(window.location.search).get("invoice");
+        var localInvoices = [];
+        try {
+            localInvoices = JSON.parse(localStorage.getItem("invoices") || "[]");
+        } catch (error) {}
+        if (!invoiceId || localInvoices.some(function (invoice) { return invoice.id === invoiceId; })) {
+            return Promise.resolve();
+        }
+        return fetch("data/invoices.json")
+            .then(function (response) { return response.ok ? response.json() : []; })
+            .then(function (invoices) {
+                var selected = invoices.find(function (invoice) { return invoice.id === invoiceId; });
+                if (selected) {
+                    window.invoiceConfig = selected;
+                }
+            })
+            .catch(function () {});
+    }
+
     window.applyInvoiceConfig = function () {
         var config = window.invoiceConfig;
         document.querySelectorAll("img.logoHead-mob").forEach(function (logo) {
@@ -56,7 +76,7 @@
     };
 
     document.addEventListener("DOMContentLoaded", function () {
-        window.applyInvoiceConfig();
+        loadHostedInvoice().then(window.applyInvoiceConfig);
         new MutationObserver(window.applyInvoiceConfig).observe(document.body, {
             childList: true,
             subtree: true,
