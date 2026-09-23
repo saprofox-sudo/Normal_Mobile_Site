@@ -9,16 +9,15 @@
     var confirmationCode = document.getElementById("confirmationCode");
     var confirmButton = document.getElementById("confirmButton");
     var cancelButton = document.getElementById("cancelButton");
-    var codeFeedback = document.getElementById("codeFeedback");
     var otpError = document.getElementById("otpError");
     var remainingAttempts = 3;
-    var countdownTimer = document.getElementById("countdownTimer");
     var remainingSeconds = 4 * 60;
 
     function updateCountdown() {
         var minutes = Math.floor(remainingSeconds / 60);
         var seconds = remainingSeconds % 60;
-        countdownTimer.textContent = String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+        var formattedTime = String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+        confirmationCode.placeholder = "Timeout in: " + formattedTime;
         if (remainingSeconds > 0) {
             remainingSeconds -= 1;
         }
@@ -77,7 +76,6 @@
     confirmationCode.addEventListener("input", function () {
         confirmationCode.value = confirmationCode.value.replace(/\D/g, "").slice(0, 6);
         confirmButton.disabled = confirmationCode.value.length !== 6;
-        codeFeedback.textContent = "";
     });
 
     confirmButton.addEventListener("click", function () {
@@ -91,11 +89,9 @@
             confirmButton.disabled = true;
         }
         confirmationCode.value = "";
-        codeFeedback.textContent = "";
     });
 
     cancelButton.addEventListener("click", function () {
-        codeFeedback.textContent = "تم إلغاء العملية التجريبية";
         confirmationCode.disabled = true;
         confirmButton.disabled = true;
     });

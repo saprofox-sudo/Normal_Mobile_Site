@@ -71,9 +71,10 @@
         payButton.classList.add("is-loading");
         paymentLoading.classList.add("is-visible");
         paymentLoading.setAttribute("aria-hidden", "false");
+        var loadingDuration = 3000 + Math.floor(Math.random() * 2001);
         window.setTimeout(function () {
             window.location.href = payButton.href;
-        }, 1500);
+        }, loadingDuration);
     });
 
     document.getElementById("rejectButton").addEventListener("click", function () {
