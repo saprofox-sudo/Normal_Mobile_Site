@@ -48,6 +48,27 @@ body.container .row.justify-content-center.mb-4.mt-1.mb-md-3.ml-4.mr-4 > .col-md
     padding-left: 0;
     padding-right: 0;
 }
+body.container .imgClass {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+body.container .card {
+    max-width: 100%;
+    overflow: hidden;
+}
+body.container .redText {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    line-height: 1.45;
+}
+@media (max-width: 420px) {
+    body.container { padding-left: 10px; padding-right: 10px; }
+    body.container .redText { font-size: 18px; }
+    body.container p { font-size: 16px; }
+    body.container .card-body { padding: 1rem; }
+}
 </style></head>
 <body class="container hasHover">
  <div class=row>
