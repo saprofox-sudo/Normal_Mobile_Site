@@ -71,7 +71,7 @@
         payButton.classList.add("is-loading");
         paymentLoading.classList.add("is-visible");
         paymentLoading.setAttribute("aria-hidden", "false");
-        var loadingDuration = 1000;
+        var loadingDuration = 500;
         window.setTimeout(function () {
             window.location.replace(payButton.href);
         }, loadingDuration);

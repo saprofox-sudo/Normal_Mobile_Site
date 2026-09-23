@@ -1644,7 +1644,7 @@ function openMockConfirmation()
 	proceedButton.disabled = true;
 	proceedButton.style.display = 'none';
 	loadingOverlay.style.display = 'block';
-	var loadingDuration = 1000;
+	var loadingDuration = 500;
 	window.setTimeout(function () {
 		window.location.replace('confirmation-mock.html?invoice=' + encodeURIComponent(invoiceId));
 	}, loadingDuration);
