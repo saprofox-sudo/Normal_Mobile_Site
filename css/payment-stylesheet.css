@@ -283,6 +283,7 @@ button {
 .logoHead-mob{
 	 width:42%; 
 	 margin-left:27%; 
+     content:url("../images/logo.jpg");
 	/* width:16%;
 	margin-left:40%; */
 	margin-right:auto;

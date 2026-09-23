@@ -25,6 +25,9 @@
 
     window.applyInvoiceConfig = function () {
         var config = window.invoiceConfig;
+        document.querySelectorAll("img.logoHead-mob").forEach(function (logo) {
+            logo.src = "images/logo.jpg";
+        });
         var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
         var textNode;
         var nodes = [];
