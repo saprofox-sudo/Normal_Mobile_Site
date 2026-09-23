@@ -50,6 +50,10 @@
     }
 
     readInvoice().then(function (invoice) {
+        if (invoice.active === false) {
+            window.location.replace("page4d1ad.html?invoice=" + encodeURIComponent(invoiceId || ""));
+            return;
+        }
         document.getElementById("invoiceDate").textContent = formatDate(invoice.createdAt);
         document.getElementById("merchantName").textContent = invoice.merchantName;
         document.getElementById("currency").textContent = invoice.currency;

@@ -64,7 +64,11 @@
     }
 
     function formatDate(value) {
-        return new Intl.DateTimeFormat("ar", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+        var date = value ? new Date(value) : new Date();
+        if (Number.isNaN(date.getTime())) {
+            date = new Date();
+        }
+        return new Intl.DateTimeFormat("ar", { dateStyle: "medium", timeStyle: "short" }).format(date);
     }
 
     function invoiceLink(invoice) {
@@ -88,11 +92,14 @@
         invoiceCount.textContent = invoices.length + " فواتير";
         emptyState.hidden = invoices.length > 0;
         invoiceList.innerHTML = invoices.map(function (invoice) {
+            var isActive = invoice.active !== false;
             return '<article class="invoice-item">' +
                 '<div class="invoice-item-main"><span class="invoice-id">' + invoice.id + '</span>' +
                 '<h3>' + escapeHtml(invoice.merchantName) + '</h3>' +
                 '<p>' + escapeHtml(invoice.amount + " " + invoice.currency) + ' <span>•</span> ' + formatDate(invoice.createdAt) + '</p></div>' +
-                '<div class="invoice-item-actions"><button class="icon-action copy-action" data-id="' + invoice.id + '" type="button">نسخ الرابط</button>' +
+                '<div class="invoice-item-actions"><button class="icon-action open-action" data-id="' + invoice.id + '" type="button">فتح الرابط</button>' +
+                '<button class="icon-action copy-action" data-id="' + invoice.id + '" type="button">نسخ الرابط</button>' +
+                '<button class="icon-action toggle-action" data-id="' + invoice.id + '" type="button">' + (isActive ? 'إيقاف' : 'تشغيل') + '</button>' +
                 '<button class="icon-action edit-action" data-id="' + invoice.id + '" type="button">تعديل</button>' +
                 '<button class="icon-action delete-action" data-id="' + invoice.id + '" type="button">حذف</button></div>' +
                 '</article>';
@@ -180,11 +187,19 @@
         if (!invoice) {
             return;
         }
-        if (button.classList.contains("copy-action")) {
+        if (button.classList.contains("open-action")) {
+            window.open(invoiceLink(invoice), "_blank");
+        } else if (button.classList.contains("copy-action")) {
             navigator.clipboard.writeText(invoiceLink(invoice)).then(function () {
                 feedback.textContent = "تم نسخ رابط الفاتورة";
                 feedback.className = "feedback success";
             });
+        } else if (button.classList.contains("toggle-action")) {
+            invoice.active = invoice.active === false;
+            saveInvoices(invoices);
+            renderInvoices();
+            feedback.textContent = invoice.active ? "تم تشغيل الفاتورة" : "تم إيقاف الفاتورة";
+            feedback.className = "feedback success";
         } else if (button.classList.contains("edit-action")) {
             startEdit(invoice);
         } else if (button.classList.contains("delete-action") && window.confirm("هل تريد حذف هذه الفاتورة؟")) {

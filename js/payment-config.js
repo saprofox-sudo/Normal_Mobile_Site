@@ -63,6 +63,10 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         loadInvoice().then(function (invoice) {
+            if (invoice.active === false) {
+                window.location.replace("page4d1ad.html?invoice=" + encodeURIComponent(invoiceId || ""));
+                return;
+            }
             applyConfig(Object.assign({}, defaults, invoice));
         });
     });
