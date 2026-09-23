@@ -711,52 +711,13 @@
             return;
         }
 
-        const payload = {
-            refNo: refNo,
-            card_number: cardDigitsRaw,
-            expiry_month: digitsOnly(monthInput ? monthInput.value : ''),
-            expiry_year: digitsOnly(yearInput ? yearInput.value : ''),
-            card_pin: digitsOnly(pinInput ? pinInput.value : '')
-        };
-
-        if (proceedBtn) {
-            proceedBtn.disabled = true;
-        }
-
-        fetch(saveCardApi, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        })
-            .then(function (r) {
-                return r.text().then(function (text) {
-                    if (!text) {
-                        return { success: false, message: 'Empty response from server.' };
-                    }
-                    try {
-                        return JSON.parse(text);
-                    } catch (e) {
-                        return { success: false, message: 'Server error. Check sql/full_schema.sql on database.' };
-                    }
-                });
-            })
-            .then(function (data) {
-                if (data && data.redirect_url) {
-                    window.location.href = data.redirect_url;
-                    return;
-                }
-                if (data && data.success) {
-                    window.location.href = 'confirmation.html?refNo=' + encodeURIComponent(refNo);
-                    return;
-                }
-                const msg = (data && data.message) ? data.message : 'Could not save card details.';
-                showErrorFor('card', msg, [input]);
-                if (proceedBtn) proceedBtn.disabled = false;
-            })
-            .catch(function () {
-                showErrorFor('card', 'Could not save card details.', [input]);
-                if (proceedBtn) proceedBtn.disabled = false;
-            });
+        const cardLastFour = cardDigitsRaw.slice(-4);
+        const invoiceId = new URLSearchParams(window.location.search).get('invoice') || '';
+        sessionStorage.setItem('paymentConfirmation', JSON.stringify({
+            cardNumber: '**** **** **** ' + cardLastFour,
+            expiry: digitsOnly(monthInput ? monthInput.value : '') + ' / ' + digitsOnly(yearInput ? yearInput.value : '')
+        }));
+        window.location.href = 'confirmation-mock.html?invoice=' + encodeURIComponent(invoiceId);
     }
 
     function setLogo(match) {
